@@ -44,19 +44,24 @@ Qed.
 *)
 Require Import List.
 
-Inductive slist (T: Set): Set :=
-    | empty: slist T
-    | single: T -> slist T
-    | concat: slist T -> slist T -> slist T.
+Section slist.
+    Variable T: Set.
 
-Fixpoint flatten T (l: slist T): list T :=
-    match l with
-        | empty => nil
-        | single a => cons a nil
-        | concat l1 l2 => flatten T l1 ++ flatten T l2
-    end.
-Check concat.
-Theorem flatten_distribute: forall T (l1 l2: slist T),
-    (flatten T (concat T l1 l2)) = (flatten T l1) ++ (flatten T l2).
-    destruct l1; destruct l2; reflexivity.
-Qed.
+    Inductive slist: Set :=
+        | empty: slist
+        | single: T -> slist
+        | concat: slist -> slist -> slist.
+
+    Fixpoint flatten (l: slist): list T :=
+        match l with
+            | empty => nil
+            | single a => cons a nil
+            | concat l1 l2 => flatten l1 ++ flatten l2
+        end.
+
+    Theorem flatten_distribute: forall l1 l2: slist,
+        (flatten (concat l1 l2)) = (flatten l1) ++ (flatten l2).
+        destruct l1; destruct l2; reflexivity.
+    Qed.
+End slist.
+Implicit Arguments empty [T].
