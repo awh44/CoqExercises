@@ -38,3 +38,25 @@ Qed.
 Theorem and_distribute: forall a b c: truth, and a (or b c) = or (and a b) (and a c).
     destruct a; destruct b; destruct c; reflexivity.
 Qed.
+
+(*
+    Exercise 2.
+*)
+Require Import List.
+
+Inductive slist (T: Set): Set :=
+    | empty: slist T
+    | single: T -> slist T
+    | concat: slist T -> slist T -> slist T.
+
+Fixpoint flatten T (l: slist T): list T :=
+    match l with
+        | empty => nil
+        | single a => cons a nil
+        | concat l1 l2 => flatten T l1 ++ flatten T l2
+    end.
+Check concat.
+Theorem flatten_distribute: forall T (l1 l2: slist T),
+    (flatten T (concat T l1 l2)) = (flatten T l1) ++ (flatten T l2).
+    destruct l1; destruct l2; reflexivity.
+Qed.
