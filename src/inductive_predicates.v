@@ -7,7 +7,7 @@ Theorem taut1: (True \/ False) /\ (False \/ True).
     split. left. constructor. right. constructor.
 Qed.
 
-(*b - doesn't stick to the right tactics*)
+(*b*)
 Theorem taut2: forall P: Prop, P -> ~~P.
     intros. unfold not. intro. destruct H0. assumption.
 Qed.
